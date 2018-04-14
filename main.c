@@ -140,7 +140,6 @@ void eval()
 	case 10:
 		printf("jmp %d\n", imm);
 		pc = imm;
-	}
 	case 11:
 		printf("nop");
 	}
