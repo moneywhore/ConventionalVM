@@ -76,7 +76,7 @@ void decode(int instr)
 	reg1 = (instr & 0xF00000) >> 20;
 	reg2 = (instr & 0xF0000) >> 16;
 	reg3 = (instr & 0xF000) >> 12;
-	imm = (instr & 0xFFF);
+	imm = (instr & 0xFFFF);
 }
 
 int running = 1;
