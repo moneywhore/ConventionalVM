@@ -102,7 +102,7 @@ void eval()
 	case 3:
 		printf("push r%d\n", reg1);
 		if (sp - 1 <= 4096) {
-			printf("Wow! Looks like you've reached the limit on the stack\nSEG_FAULT\nContinuing...");
+			printf("Wow! Looks like you've reached the limit on the stack\nSEG_FAULT\nContinuing...\n");
 			break;
 		}
 		sp--;
@@ -112,7 +112,7 @@ void eval()
 	case 4:
 		printf("pop r%d\n", reg1);
 		if (sp + 1 > 8192) {
-			printf("Nothing to pop, continuing");
+			printf("Nothing to pop, continuing\n");
 			break;
 		}
 		regs[reg1] = memory[sp];
@@ -145,13 +145,19 @@ void eval()
 		break;
 	case 9:
 		printf("memw r%d r%d\n", reg1, reg2);
+		if (regs[reg2] <= 4096) {
+			printf("Hey! You can't write to program code, silly billy.\n");
+			break;
+		}
 		memory[regs[reg2]] = regs[reg1];
 		break;
 	case 10:
 		printf("jmp %d\n", imm);
 		pc = imm;
+		break;
 	case 11:
 		printf("nop\n");
+		break;
 	case 12:
 		printf("mul r%d r%d r%d\n", reg1, reg2, reg3);
 		regs[reg1] = regs[reg2] * regs[reg3];
@@ -163,14 +169,15 @@ void eval()
 			break;
 		}
 		csp--;
+		memory[csp] = pc;
 		pc = regs[reg1];
 		printf("PC: %d\n", pc);
 		printf("CSP: %d\n", csp);
 		break;
 	case 14:
-		printf("ret");
-		pc = memory[csp];
-		csp++;
+		printf("ret\n");
+		printf("%d\n", memory[csp]);
+		pc = memory[csp]+1;
 		printf("PC: %d\n", pc);
 		printf("CSP: %d\n", csp);
 		break;
