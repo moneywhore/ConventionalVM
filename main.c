@@ -17,6 +17,8 @@ int imm = 0;
 int sp = 8192;
 int sb = 8192;
 int cf = 0;
+int csp = 2048;
+int csb = 2048;
 
 char *load_file(char *filename) {
 	FILE *codeF;
@@ -99,12 +101,20 @@ void eval()
 		break;
 	case 3:
 		printf("push r%d\n", reg1);
+		if (sp - 1 <= 4096) {
+			printf("Wow! Looks like you've reached the limit on the stack\nSEG_FAULT\nContinuing...");
+			break;
+		}
 		sp--;
 		memory[sp] = regs[reg1];
 		printf("%d\n", sp);
 		break;
 	case 4:
 		printf("pop r%d\n", reg1);
+		if (sp + 1 > 8192) {
+			printf("Nothing to pop, continuing");
+			break;
+		}
 		regs[reg1] = memory[sp];
 		memory[sp] = 0;
 		sp++;
@@ -141,7 +151,29 @@ void eval()
 		printf("jmp %d\n", imm);
 		pc = imm;
 	case 11:
-		printf("nop");
+		printf("nop\n");
+	case 12:
+		printf("mul r%d r%d r%d\n", reg1, reg2, reg3);
+		regs[reg1] = regs[reg2] * regs[reg3];
+		break;
+	case 13:
+		printf("call r%d\n", reg1);
+		if (regs[reg1] > 4096) {
+			printf("Back at it again, trying to run data as code\nSEG_FAULT");
+			break;
+		}
+		csp--;
+		pc = regs[reg1];
+		printf("PC: %d\n", pc);
+		printf("CSP: %d\n", csp);
+		break;
+	case 14:
+		printf("ret");
+		pc = memory[csp];
+		csp++;
+		printf("PC: %d\n", pc);
+		printf("CSP: %d\n", csp);
+		break;
 	}
 }
 
@@ -177,7 +209,7 @@ void run()
 int main(int argc, char * argv[])
 {
 	if (argc < 2) {
-		printf("Error! Useage %s FILENAME.", argv[0]);
+		printf("Error: %s <FILENAME>.", argv[0]);
 		return -1;
 	}
 
