@@ -3,6 +3,7 @@
 
 #define NUM_REGS 4
 #define byte char
+
 signed int regs[NUM_REGS];
 
 unsigned int memory[8192];
@@ -120,9 +121,17 @@ void eval()
 		}
 		break;
 	case 6:
+<<<<<<< HEAD
 		if (cf) {
 			printf("jmpeq %d\n", imm);
+=======
+		printf("jmpeq %d\n", imm);
+		if(cf) {
+>>>>>>> 080b34fdf0ca95e928792c31e82c7705d3ef44d9
 			pc = imm;
+		}else
+		{
+			printf("Didn't jump\n");
 		}
 		break;
 	case 7:
@@ -134,6 +143,7 @@ void eval()
 		regs[reg1] = memory[regs[reg2]];
 		break;
 	case 9:
+<<<<<<< HEAD
 		printf("memw r%d r%d\n", reg1, reg2);
 		memory[regs[reg2]] = regs[reg1];
 		break;
@@ -143,6 +153,13 @@ void eval()
 	}
 	case 11:
 		printf("nop");
+=======
+	  printf("memw r%d r%d\n", reg1, reg2);
+	  printf("Before set. Address %d, Value: %d\n", regs[reg2], memory[regs[reg2]]);
+      memory[regs[reg2]] = regs[reg1];
+	  printf("Address %d, Value: %d\n",regs[reg2], memory[regs[reg2]]);
+	  break;
+>>>>>>> 080b34fdf0ca95e928792c31e82c7705d3ef44d9
 	}
 }
 
@@ -153,8 +170,9 @@ void showRegs()
 	printf("regs = ");
 	for (i = 0; i<NUM_REGS; i++)
 	{
-		printf("%08X ", regs[i]);
+		printf("Reg %d: %08X ",i, regs[i]);
 	}
+	printf("cf: %d pc: %d", cf,pc);
 	printf("\nstack: ");
 	for (x = 1; x<10; x++)
 	{
