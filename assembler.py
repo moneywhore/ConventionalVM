@@ -1,4 +1,4 @@
-codes = {"halt" : "00", "loadi" : "01", "add" : "02", "push" : "03", "pop" : "04", "cmp" : "05", "jmpeq" : "06"}
+codes = {"halt" : "00", "loadi" : "01", "add" : "02", "push" : "03", "pop" : "04", "cmp" : "05", "jmpeq" : "06", "sub" : "07"}
 regs = {"r0" : "0", "r1" : "1", "r2" : "2", "r3" : "3"}
 
 with open("needasm.txt", "r") as f:

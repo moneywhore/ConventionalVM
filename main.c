@@ -3,7 +3,7 @@
 
 #define NUM_REGS 4
 #define byte char
-unsigned int regs[NUM_REGS];
+signed int regs[NUM_REGS];
 
 unsigned int memory[8192];
 
@@ -125,7 +125,12 @@ void eval()
 			pc = imm;
 		}
 		break;
+	case 7:
+	  printf("sub r%d r%d\n", reg1, reg2);
+	  regs[reg1] = regs[reg2] - regs[reg3];
+	  break;
 	}
+
 }
 
 void showRegs()
@@ -135,7 +140,7 @@ void showRegs()
 	printf("regs = ");
 	for (i = 0; i<NUM_REGS; i++)
 	{
-		printf("%04X ", regs[i]);
+		printf("%08X ", regs[i]);
 	}
 	printf("\nstack: ");
 	for (x = 1; x<10; x++)
