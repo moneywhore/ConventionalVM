@@ -16,6 +16,7 @@ int reg3 = 0;
 int imm = 0;
 int sp = 8192;
 int sb = 8192;
+int cf = 0;
 
 char *load_file(char *filename) {
 	FILE *codeF;
@@ -52,7 +53,7 @@ int load_mem(char *filename) {
 			instNum[setOpCode] = buff[opcode + setOpCode];
 		}
 
-		//Conver the character array to an int and from hex to int then set the value at the memory location to that.
+		//Convert the character array to an int and from hex to int then set the value at the memory location to that.
 		inst = (int)strtol(instNum, NULL, 16);
 		memory[memoryLocation] = inst;
 		memoryLocation++;
@@ -109,7 +110,24 @@ void eval()
 		sp++;
 		printf("%d\n", sp);
 		break;
+	case 5:
+		printf("cmp r%d r%d\n", reg1, reg2);
+		if (regs[reg1] == regs[reg2]) {
+			cf = 1;
+		}
+		else {
+			cf = 0;
+		}
+		break;
+	case 6:
+		if(cf) {
+			printf("jmp %d\n", imm);
+			pc = imm;
+		}
+		break;
 	}
+	
+	
 }
 
 void showRegs()
