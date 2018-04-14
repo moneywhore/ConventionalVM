@@ -3,6 +3,7 @@
 
 #define NUM_REGS 4
 #define byte char
+
 signed int regs[NUM_REGS];
 
 unsigned int memory[8192];
@@ -120,9 +121,12 @@ void eval()
 		}
 		break;
 	case 6:
+		printf("jmpeq %d\n", imm);
 		if(cf) {
-			printf("jmp %d\n", imm);
 			pc = imm;
+		}else
+		{
+			printf("Didn't jump\n");
 		}
 		break;
 	case 7:
@@ -135,7 +139,9 @@ void eval()
 	  break;
 	case 9:
 	  printf("memw r%d r%d\n", reg1, reg2);
-	  memory[regs[reg2]] = regs[reg1];
+	  printf("Before set. Address %d, Value: %d\n", regs[reg2], memory[regs[reg2]]);
+      memory[regs[reg2]] = regs[reg1];
+	  printf("Address %d, Value: %d\n",regs[reg2], memory[regs[reg2]]);
 	  break;
 	}
 
@@ -148,8 +154,9 @@ void showRegs()
 	printf("regs = ");
 	for (i = 0; i<NUM_REGS; i++)
 	{
-		printf("%08X ", regs[i]);
+		printf("Reg %d: %08X ",i, regs[i]);
 	}
+	printf("cf: %d pc: %d", cf,pc);
 	printf("\nstack: ");
 	for (x = 1; x<10; x++)
 	{
