@@ -74,8 +74,8 @@ void decode(int instr)
 {
 	instrNum = (instr & 0xFF000000) >> 24;
 	reg1 = (instr & 0xF00000) >> 20;
-	reg2 = (instr & 0xF000) >> 16;
-	reg3 = (instr & 0xF0);
+	reg2 = (instr & 0xF0000) >> 16;
+	reg3 = (instr & 0xF000) >> 12;
 	imm = (instr & 0xFFF);
 }
 
@@ -126,8 +126,6 @@ void eval()
 		}
 		break;
 	}
-	
-	
 }
 
 void showRegs()
