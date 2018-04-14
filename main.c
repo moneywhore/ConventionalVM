@@ -120,25 +120,30 @@ void eval()
 		}
 		break;
 	case 6:
-		if(cf) {
-			printf("jmp %d\n", imm);
+		if (cf) {
+			printf("jmpeq %d\n", imm);
 			pc = imm;
 		}
 		break;
 	case 7:
-	  printf("sub r%d r%d r%d\n", reg1, reg2, reg3);
-	  regs[reg1] = regs[reg2] - regs[reg3];
-	  break;
+		printf("sub r%d r%d r%d\n", reg1, reg2, reg3);
+		regs[reg1] = regs[reg2] - regs[reg3];
+		break;
 	case 8:
-	  printf("memr r%d r%d\n", reg1, reg2);
-	  regs[reg1] = memory[regs[reg2]];
-	  break;
+		printf("memr r%d r%d\n", reg1, reg2);
+		regs[reg1] = memory[regs[reg2]];
+		break;
 	case 9:
-	  printf("memw r%d r%d\n", reg1, reg2);
-	  memory[regs[reg2]] = regs[reg1];
-	  break;
+		printf("memw r%d r%d\n", reg1, reg2);
+		memory[regs[reg2]] = regs[reg1];
+		break;
+	case 10:
+		printf("jmp %d\n", imm);
+		pc = imm;
 	}
-
+	case 11:
+		printf("nop");
+	}
 }
 
 void showRegs()

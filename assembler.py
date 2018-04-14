@@ -8,6 +8,7 @@ for i in content:
     i =i.split()
     print i
     if i[0] in codes:
+        print i[0]
         codeStr += codes[i[0]]
         
     else:
@@ -30,13 +31,16 @@ for i in content:
             codeStr += "000"
         if r0:
             codeStr += "00"
+        print codeStr
         continue
     
     if i[2] in regs:
         codeStr += regs[i[2]]
         
     elif i[2][0] == "#":
+        print i[2][1:]
         codeStr += "00" + "0"*(3 - len(format(int(i[2][1:]), 'x'))) + format(int(i[2][1:]), 'x')
+        print codeStr
         continue
     
     else:
