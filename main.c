@@ -20,7 +20,7 @@ int cf = 0;
 
 char *load_file(char *filename) {
 	FILE *codeF;
-	char *buff = malloc(sizeof(char) * 1024);
+	char *buff = malloc(sizeof(char) * 2048);
 
 	codeF = fopen(filename, "r");
 	if (codeF == NULL) {
@@ -41,15 +41,15 @@ int load_mem(char *filename) {
 	int setOpCode;
 	int memoryLocation = 0;
 	int inst;
-	byte instNum[4];
+	byte instNum[8];
 
 	/*
 	Loop through the hex on a single line of a text file and convert it to the opcodes/instructions.
-	instNum is 4 bytes which is used to make up each opcode/instruction.
+	instNum is 8 bytes which is used to make up each opcode/instruction.
 	*/
-	for (opcode = 0; opcode < 1024; opcode += 4) {
-		for (setOpCode = 0; setOpCode < 4; setOpCode++) {
-			//Loop through the 4 bytes in the opcode int and set them to the value that it should be.
+	for (opcode = 0; opcode < 1024; opcode += 8) {
+		for (setOpCode = 0; setOpCode < 8; setOpCode++) {
+			//Loop through the 8 bytes in the opcode int and set them to the value that it should be.
 			instNum[setOpCode] = buff[opcode + setOpCode];
 		}
 
@@ -72,11 +72,11 @@ int fetch()
 
 void decode(int instr)
 {
-	instrNum = (instr & 0xF000) >> 12;
-	reg1 = (instr & 0xF00) >> 8;
-	reg2 = (instr & 0xF0) >> 4;
-	reg3 = (instr & 0xF);
-	imm = (instr & 0xFF);
+	instrNum = (instr & 0xFF000000) >> 24;
+	reg1 = (instr & 0xF00000) >> 20;
+	reg2 = (instr & 0xF000) >> 16;
+	reg3 = (instr & 0xF0);
+	imm = (instr & 0xFFF);
 }
 
 int running = 1;
