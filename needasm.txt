@@ -1,3 +1,4 @@
-loadi r0 #23
-loadi r1 #17
+loadi r0 #17
+loadi r1 #23
 sub r2 r0 r1
+add r1 r0 r2

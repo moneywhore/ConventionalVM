@@ -126,7 +126,7 @@ void eval()
 		}
 		break;
 	case 7:
-	  printf("sub r%d r%d\n", reg1, reg2);
+	  printf("sub r%d r%d r%d\n", reg1, reg2, reg3);
 	  regs[reg1] = regs[reg2] - regs[reg3];
 	  break;
 	}
