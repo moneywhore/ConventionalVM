@@ -176,7 +176,6 @@ void eval()
 		break;
 	case 14:
 		printf("ret\n");
-		printf("%d\n", memory[csp]);
 		pc = memory[csp];
 		csp++;
 		printf("PC: %d\n", pc);
