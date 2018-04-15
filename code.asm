@@ -1,6 +1,6 @@
 loadi r0 100
 loadi r1 50
-loadi r2 8
+loadi r2 9
 call r2
 push r1
 nop
