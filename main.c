@@ -23,7 +23,7 @@ Node *addNode(Node* tail,int address){
 #define byte char
 signed int regs[NUM_REGS];
 
-unsigned int memory[8192];
+unsigned int memory[32768];
 
 int pc = 0;
 int running = 1;
@@ -33,10 +33,9 @@ int reg1 = 0;
 int reg2 = 0;
 int reg3 = 0;
 int imm = 0;
-int sp = 8192;
-int sb = 8192;
+int sp = 32768;
+int sb = 32768;
 int cf = 0;
-int csp = 2048;
 
 
 
@@ -199,6 +198,10 @@ void eval(Node *returnStack)
 			break;
 		}
 		retInstr(returnStack);
+		break;
+	case 15:
+		printf("div r%d r%d r%d\n", reg1, reg2, reg3);
+		regs[reg1] = regs[reg2] / regs[reg3];
 		break;
 	}
 }
