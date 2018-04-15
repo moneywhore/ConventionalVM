@@ -1,6 +1,24 @@
 #include <stdio.h>
 #include <malloc.h>
 
+typedef struct node_s{
+    struct node_s *Previous;
+    int returnAddress;
+} Node;
+
+Node *removeNode(Node *tail){
+    Node *previous =  tail->Previous;
+    free(tail);
+    return previous;
+}
+
+Node *addNode(Node* tail,int address){
+    Node *n = malloc(sizeof(Node));
+    n->Previous =n;
+    n->returnAddress=address;
+    return n;
+}
+
 #define NUM_REGS 4
 #define byte char
 signed int regs[NUM_REGS];
@@ -8,6 +26,7 @@ signed int regs[NUM_REGS];
 unsigned int memory[8192];
 
 int pc = 0;
+int running = 1;
 
 int instrNum = 0;
 int reg1 = 0;
@@ -18,7 +37,8 @@ int sp = 8192;
 int sb = 8192;
 int cf = 0;
 int csp = 2048;
-int csb = 2048;
+
+
 
 char *load_file(char *filename) {
 	FILE *codeF;
@@ -33,7 +53,6 @@ char *load_file(char *filename) {
 	fscanf(codeF, "%s", buff);
 	return buff;
 }
-
 
 int load_mem(char *filename) {
 	printf("%s\n", filename);
@@ -70,8 +89,6 @@ int fetch()
 	return memory[pc++];
 }
 
-
-
 void decode(int instr)
 {
 	instrNum = (instr & 0xFF000000) >> 24;
@@ -81,9 +98,18 @@ void decode(int instr)
 	imm = (instr & 0xFFFF);
 }
 
-int running = 1;
+void callInstr(int address, Node *returnStack){
+	returnStack = addNode(returnStack,pc+1);
+	pc = address;
+}
 
-void eval()
+void retInstr(Node *returnStack){
+	pc= returnStack->returnAddress;
+	returnStack = removeNode(returnStack);
+}
+
+
+void eval(Node *returnStack)
 {
 	switch (instrNum)
 	{
@@ -164,25 +190,15 @@ void eval()
 		break;
 	case 13:
 		printf("call r%d\n", reg1);
-		if (regs[reg1] > 4096) {
-			printf("Back at it again, trying to run data as code\nSEG_FAULT");
-			break;
-		}
-		csp--;
-		memory[csp] = pc;
-		pc = regs[reg1];
-		printf("PC: %d\n", pc);
-		printf("CSP: %d\n", csp);
+		callInstr(regs[reg1],returnStack);
 		break;
 	case 14:
 		printf("ret\n");
-		pc = memory[csp];
-		csp++;
-		printf("PC: %d\n", pc);
-		printf("CSP: %d\n", csp);
+		retInstr(returnStack);
 		break;
 	}
 }
+
 
 void showRegs()
 {
@@ -201,14 +217,14 @@ void showRegs()
 	printf("\n");
 }
 
-void run()
+void run(Node *returnStack)
 {
 	while (running)
 	{
 		showRegs();
 		int instr = fetch();
 		decode(instr);
-		eval();
+		eval(returnStack);
 	}
 	showRegs();
 }
@@ -219,8 +235,11 @@ int main(int argc, char * argv[])
 		printf("Error: %s <FILENAME>.", argv[0]);
 		return -1;
 	}
+	Node *n = malloc(sizeof(Node));
+	n->Previous=NULL;
+	n->returnAddress=NULL;
 
 	load_mem(argv[1]);
-	run();
+	run(n);
 	return 0;
 }
