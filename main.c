@@ -14,7 +14,7 @@ Node *removeNode(Node *tail){
 
 Node *addNode(Node* tail,int address){
     Node *n = malloc(sizeof(Node));
-    n->Previous =n;
+    n->Previous =tail;
     n->returnAddress=address;
     return n;
 }
@@ -194,6 +194,10 @@ void eval(Node *returnStack)
 		break;
 	case 14:
 		printf("ret\n");
+		if (returnStack->Previous == NULL) {
+			printf("You have no one to return to :(\n");
+			break;
+		}
 		retInstr(returnStack);
 		break;
 	}
