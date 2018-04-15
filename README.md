@@ -39,8 +39,10 @@ VM written in C and Kotlin. It is relatively conventional, though unique at the 
   There will never be a case where both a 16 bit immediate value and a third register will be needed, so their sizes are variable based   on case.
   
 ## NOTES: 
-Assemblr.jar assembles any file named "code.asm" into "code.txt"
-main.exe requires an input text file (like code.txt) to function
+Assemblr.jar assembles any file named "code.asm" into "code.txt".
+
+main.exe requires an input text file (like code.txt) to function.
+
 There are some admittedly-scattered examples of assembly in the source, so if you come across this you could maybe even try to build programs for the VM!
 
 
