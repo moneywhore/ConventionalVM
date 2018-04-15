@@ -85,7 +85,7 @@ fun push(arg:List<String>):String{
 }
 
 fun pop(args:List<String>):String{
-    return "04"+args[1].split("R","")+"00000"
+    return "04"+args[1].split("R","")[2] + padStrings(4)
 }
 
 fun cmp(args:List<String>):String{
@@ -105,11 +105,11 @@ fun jmpStuff(args:List<String>):String{
 }
 
 fun call(args: List<String>):String {
-    return "0D" + args[1].split("R","")+"00000"
+    return "0D" + args[1].split("R","")[2] + padStrings(4)
 }
 
 fun ret():String {
-    return "0E" + "000000"
+    return "0E" + padStrings(6)
 }
 
 fun jmpeq(args:List<String>):String{
@@ -121,7 +121,7 @@ fun jmp(args:List<String>):String{
 }
 
 fun nop():String{
-    return "0B" + padStrings(5)
+    return "0B" + padStrings(6)
 }
 
 fun addMore(opcode:Int, args:List<String>):String{

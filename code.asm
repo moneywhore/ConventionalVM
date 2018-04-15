@@ -8,4 +8,3 @@ halt
 nop
 push r0
 loadi r0 14
-ret
