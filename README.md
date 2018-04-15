@@ -1,6 +1,8 @@
 # ConventionalVM
 VM written in C and Kotlin. It is relatively conventional, though unique at the same time
 
+![Old Computer](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Tatung-einstein-computer.png/271px-Tatung-einstein-computer.png)
+
 ## Current Supported Instructions:
   - HALT - Represented by opcode 0, stops execution, essentially acts as a failsafe if the program goes haywire
   - LOADI - Loads a register with a literal value
