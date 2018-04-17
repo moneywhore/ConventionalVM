@@ -1,2 +1,3 @@
-loada r0 %FFCC
-loadb r0 %FFDD
+loada r0 %666f
+loadb r0 %7572
+dbg
