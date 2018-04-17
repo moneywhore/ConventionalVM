@@ -110,6 +110,9 @@ void retInstr(Node *returnStack){
 
 void eval(Node *returnStack)
 {
+	int upperHalf = 0;
+	int lowerHalf = 0;
+	int newVal = 0;
 	switch (instrNum)
 	{
 	case 0:
@@ -202,6 +205,23 @@ void eval(Node *returnStack)
 	case 15:
 		printf("div r%d r%d r%d\n", reg1, reg2, reg3);
 		regs[reg1] = regs[reg2] / regs[reg3];
+		break;
+	case 16:
+		printf("PRINT: %c\n", regs[reg1]);
+		break;
+	case 17:
+		printf("loada r%d, %d\n", reg1, imm);
+		upperHalf = (regs[reg1] & 0xFFFF) >> 16;	
+		printf("%d\n", upperHalf);
+		newVal = (upperHalf * 65536) + imm;
+		regs[reg1] = newVal;
+		break;
+	case 18:
+		printf("loadb r%d, %d\n", reg1, imm);
+		lowerHalf = (regs[reg1] & 0xFFFF);
+		printf("%d\n", lowerHalf);
+		newVal = (imm * 65536) + lowerHalf;
+		regs[reg1] = newVal;
 		break;
 	}
 }
