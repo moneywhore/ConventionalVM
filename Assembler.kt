@@ -1,6 +1,6 @@
 import java.io.File
 
-enum class OpCodes(val number:Int){
+enum class Opcodes(val number:Int){
     HALT(0),
     LOADI(1),
     ADD(2),
@@ -15,27 +15,37 @@ enum class OpCodes(val number:Int){
     NOP(11),
     MUL(12),
     CALL(13),
-    RET(14)
+    RET(14),
+    DIV(15),
+    DBG(16),
+    LOADA(17),
+    LOADB(18),
+    INT(19)
 }
 
 fun convertToBaseOpCode(command:String):Int{
     return when(command){
-        "HALT" -> OpCodes.HALT.number
-        "LOADI"-> OpCodes.LOADI.number
-        "ADD" -> OpCodes.ADD.number
-        "PUSH" -> OpCodes.PUSH.number
-        "POP" -> OpCodes.POP.number
-        "CMP" -> OpCodes.CMP.number
-        "JMPEQ" -> OpCodes.JMPEQ.number
-        "SUB" -> OpCodes.SUB.number
-        "MEMW" -> OpCodes.MEMW.number
-        "MEMR" -> OpCodes.MEMR.number
-        "JMP" -> OpCodes.JMP.number
-        "NOP" -> OpCodes.NOP.number
-        "MUL" -> OpCodes.MUL.number
-        "CALL" -> OpCodes.CALL.number
-        "RET" -> OpCodes.RET.number
-        else -> OpCodes.HALT.number
+        "HALT" -> Opcodes.HALT.number
+        "LOADI"-> Opcodes.LOADI.number
+        "ADD" -> Opcodes.ADD.number
+        "PUSH" -> Opcodes.PUSH.number
+        "POP" -> Opcodes.POP.number
+        "CMP" -> Opcodes.CMP.number
+        "JMPEQ" -> Opcodes.JMPEQ.number
+        "SUB" -> Opcodes.SUB.number
+        "MEMW" -> Opcodes.MEMW.number
+        "MEMR" -> Opcodes.MEMR.number
+        "JMP" -> Opcodes.JMP.number
+        "NOP" -> Opcodes.NOP.number
+        "MUL" -> Opcodes.MUL.number
+        "CALL" -> Opcodes.CALL.number
+        "RET" -> Opcodes.RET.number
+        "DIV" -> Opcodes.DIV.number
+        "DBG" -> Opcodes.DBG.number
+        "LOADA" -> Opcodes.LOADA.number
+        "LOADB" -> Opcodes.LOADB.number
+        "INT" -> Opcodes.INT.number
+        else -> Opcodes.HALT.number
     }
 }
 
@@ -53,19 +63,12 @@ fun twoRegisters(args:List<String>):String{
     return reg1 + reg2 + padStrings(3)
 }
 
+//region Math
 fun mathOpCode(args:List<String>):String {
     val register1 = args[1].replace("R","")
     val register2 = args[2].replace("R","")
     val register3 = args[3].replace("R","")
     return  register1 + register2 + register3 + padStrings(2)
-}
-
-
-fun loadi(args:List<String>):String {
-    val register = args[1].replace("R","")
-    val imm = args[2]
-    val hexValue = Integer.toHexString(imm.toInt())
-    return "01" + register + padStrings(4 - hexValue.length) + hexValue
 }
 
 fun add(args:List<String>):String{
@@ -78,6 +81,30 @@ fun sub(args:List<String>):String{
 
 fun mul(args:List<String>):String {
     return "0C" + mathOpCode(args)
+}
+
+fun div(args:List<String>):String {
+    return "0F" + mathOpCode(args)
+}
+//endregion
+
+fun load(args:List<String>):String{
+    val register = args[1].replace("R","")
+    val imm = args[2]
+    val hexValue = Integer.toHexString(imm.toInt())
+    return register + padStrings(4 - hexValue.length) + hexValue
+}
+
+fun loadi(args:List<String>):String {
+    return "01" + load(args)
+}
+
+fun loada(args:List<String>):String{
+    return "11" + load(args)
+}
+
+fun loadb(args:List<String>):String{
+    return "12" + load(args)
 }
 
 fun push(arg:List<String>):String{
@@ -126,21 +153,24 @@ fun nop():String{
 
 fun addMore(opcode:Int, args:List<String>):String{
     return when(opcode){
-        OpCodes.HALT.number -> padStrings(8)
-        OpCodes.LOADI.number -> loadi(args)
-        OpCodes.ADD.number -> add(args)
-        OpCodes.PUSH.number -> push(args)
-        OpCodes.POP.number -> pop(args)
-        OpCodes.CMP.number -> cmp(args)
-        OpCodes.JMPEQ.number -> jmpeq(args)
-        OpCodes.SUB.number -> sub(args)
-        OpCodes.MEMR.number -> memr(args)
-        OpCodes.MEMW.number -> memw(args)
-        OpCodes.JMP.number -> jmp(args)
-        OpCodes.NOP.number -> nop()
-        OpCodes.MUL.number -> mul(args)
-        OpCodes.CALL.number -> call(args)
-        OpCodes.RET.number -> ret()
+        Opcodes.HALT.number -> padStrings(8)
+        Opcodes.LOADI.number -> loadi(args)
+        Opcodes.ADD.number -> add(args)
+        Opcodes.PUSH.number -> push(args)
+        Opcodes.POP.number -> pop(args)
+        Opcodes.CMP.number -> cmp(args)
+        Opcodes.JMPEQ.number -> jmpeq(args)
+        Opcodes.SUB.number -> sub(args)
+        Opcodes.MEMR.number -> memr(args)
+        Opcodes.MEMW.number -> memw(args)
+        Opcodes.JMP.number -> jmp(args)
+        Opcodes.NOP.number -> nop()
+        Opcodes.MUL.number -> mul(args)
+        Opcodes.CALL.number -> call(args)
+        Opcodes.RET.number -> ret()
+        Opcodes.DBG.number -> "10"+padStrings(6)
+        Opcodes.LOADA.number -> loada(args)
+        Opcodes.LOADB.number -> loadb(args)
         else -> "0000000000"
     }
 }
