@@ -9,5 +9,8 @@ void handleInterrupt(int code) {
 	case 0:
 		printf("MON:%c\n", regs[0]);
 		return;
+	case 1:
+		regs[0] = getch();
+		return;
 	}
 }

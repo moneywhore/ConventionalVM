@@ -1,2 +1,2 @@
-loadi r0 65
+int 1
 int 0
