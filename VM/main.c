@@ -46,7 +46,7 @@ void showRegs()
 {
 	int i;
 	int x;
-	printf("regs = ");
+	printf("regs\n");
 	for (i = 0; i<NUM_REGS; i++)
 	{
 		printf("%08X\n", regs[i]);
@@ -137,7 +137,6 @@ void run(Node *returnStack)
 		decode(instr);
 		eval(returnStack);
 	}
-	showRegs();
 }
 
 int main(int argc, char * argv[])

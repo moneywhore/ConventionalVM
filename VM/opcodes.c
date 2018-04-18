@@ -130,6 +130,7 @@ void loadb(int reg1, int imm) {
 	return;
 }
 void interrupt(int imm) {
-	printf("INTERRUPT %d", imm);
+	printf("INTERRUPT %d\n", imm);
+	handleInterrupt(imm);
 	return;
 }

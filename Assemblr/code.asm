@@ -1,2 +1,2 @@
-loadi r0 100
-dbg
+loadi r0 65
+int 0
