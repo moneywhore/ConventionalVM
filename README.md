@@ -1,5 +1,5 @@
 # ConventionalVM
-VM written in C and Kotlin. It is relatively conventional, though unique at the same time
+VM written in C and Kotlin. It is relatively conventional, though unique at the same time.
 
 ![Old Computer](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Tatung-einstein-computer.png/271px-Tatung-einstein-computer.png)
 
@@ -21,12 +21,28 @@ VM written in C and Kotlin. It is relatively conventional, though unique at the 
   - CALL - Calls a piece of code from an address stored in the provided register
   - RET - Returns execution to the caller
   - DIV - (result register) (operand register1) (operand register2) Divides a number by another and stores the value in another
+  - DBG - Prints the value of all 16 registers, and 10 lines of stack
+  - LOADA - Loads the lower half of a register with a literal value
+  - LOADB - Loads the upper half of a register with a literal value
+  - INT - Interrupts execution using the literal as the code
  
-## The VM currently has four directly-editable registers:
+## The VM currently has sixteen directly-editable registers:
   - r0
   - r1
   - r2
   - r3
+  - r4
+  - r5
+  - r6
+  - r7
+  - r8
+  - r9
+  - r10
+  - r11
+  - r12
+  - r13
+  - r14
+  - r15
   - program counter (uneditable)
   - stack pointer (uneditable)
   - stack base (uneditable)
@@ -40,7 +56,9 @@ VM written in C and Kotlin. It is relatively conventional, though unique at the 
   - 12/16 immediate value bits
   There will never be a case where both a 16 bit immediate value and a third register will be needed, so their sizes are variable based   on case.
   
-## NOTES: 
+## NOTES:
+The VM now supports devices that read the programs output. Right now, a "monitor" is included that makes a fancy tkinter screen for output. Will add graphics soon!
+
 Assemblr.jar assembles any file named "code.asm" into "code.txt".
 
 main.exe requires an input text file (like code.txt) to function.

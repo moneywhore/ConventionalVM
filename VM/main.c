@@ -46,15 +46,15 @@ void showRegs()
 {
 	int i;
 	int x;
-	printf("regs\n");
+	printf("MON:regs\n");
 	for (i = 0; i<NUM_REGS; i++)
 	{
-		printf("%08X\n", regs[i]);
+		printf("MON:%08X\n", regs[i]);
 	}
-	printf("\nstack: ");
+	printf("MON:\nstack: ");
 	for (x = 1; x<10; x++)
 	{
-		printf("%04X ", memory[sb - x]);
+		printf("MON:%04X ", memory[sb - x]);
 	}
 	printf("\n");
 }
