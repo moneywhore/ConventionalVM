@@ -1,8 +1,5 @@
 #include <malloc.h>
 
-#define NUM_REGS 16
-#define byte char
-
 typedef struct node_s {
 	struct node_s *Previous;
 	int returnAddress;
