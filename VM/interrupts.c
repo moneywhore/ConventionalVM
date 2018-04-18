@@ -21,6 +21,7 @@ void handleInterrupt(int code) {
 			printf("%c", second);
 		}
 		printf("\n");
+		printf("MON: \n");
 		return;
 	}
 }

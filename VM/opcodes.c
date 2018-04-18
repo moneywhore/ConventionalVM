@@ -111,7 +111,7 @@ void div(int reg1, int reg2, int reg3) {
 	return;
 }
 void dbg() {
-	printf("DGB:\n");
+	printf("MON:DBG:\n");
 	showRegs();
 	return;
 }
