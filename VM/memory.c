@@ -1,4 +1,6 @@
-#include <malloc.h>
+#include <stdio.h>
+#define NUM_REGS 16
+#define byte char
 
 typedef struct node_s {
 	struct node_s *Previous;
@@ -21,6 +23,7 @@ Node *addNode(Node* tail, int address) {
 unsigned int memory[32768];
 int sp = 32768;
 int sb = 32768;
+
 
 char *load_file(char *filename) {
 	FILE *codeF;

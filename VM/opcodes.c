@@ -1,18 +1,17 @@
-#include "VMVariables.h"
-#include "memory.c"
+#define NUM_REGS 16
+#define byte char
+#include "memory.h"
+#include <stdio.h>
+#include "main.h"
 
 signed int regs[NUM_REGS];
-int pc = 0;
-int running = 1;
-int instrNum = 0;
-int reg1 = 0;
-int reg2 = 0;
-int reg3 = 0;
-int imm = 0;
-int cf = 0;
+
+int upperHalf = 0;
+int lowerHalf = 0;
+int newVal = 0;
 
 void halt() {
-	printf("HALT");
+	printf("HALT\n");
 	running = 0;
 	return;
 }
@@ -111,11 +110,6 @@ void div(int reg1, int reg2, int reg3) {
 	regs[reg1] = regs[reg2] / regs[reg3];
 	return;
 }
-void dgb() {
-	printf("DBG:\n");
-	showRegs();
-	return;
-}
 void loada(int reg1, int imm) {
 	printf("loada r%d, %d\n", reg1, imm);
 	upperHalf = (regs[reg1] & 0xFFFF) >> 16;
@@ -132,5 +126,5 @@ void loadb(int reg1, int imm) {
 }
 void interrupt(int imm) {
 	printf("INTERRUPT %d", imm);
-	handleInterrupt(imm);
+	return;
 }
