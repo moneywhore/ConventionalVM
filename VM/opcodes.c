@@ -110,6 +110,11 @@ void div(int reg1, int reg2, int reg3) {
 	regs[reg1] = regs[reg2] / regs[reg3];
 	return;
 }
+void dbg() {
+	printf("DGB:\n");
+	showRegs();
+	return;
+}
 void loada(int reg1, int imm) {
 	printf("loada r%d, %d\n", reg1, imm);
 	upperHalf = (regs[reg1] & 0xFFFF) >> 16;

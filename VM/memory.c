@@ -20,9 +20,9 @@ Node *addNode(Node* tail, int address) {
 	return n;
 }
 
-unsigned int memory[32768];
-int sp = 32768;
-int sb = 32768;
+unsigned int memory[20000000];
+int sp = 20000000;
+int sb = 20000000;
 
 
 char *load_file(char *filename) {
