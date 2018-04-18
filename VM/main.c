@@ -115,7 +115,7 @@ void eval(Node *returnStack)
 		div(reg1, reg2, reg3);
 		break;
 	case 16:
-		printf("oof");
+		dbg();
 		break;
 	case 17:
 		loada(reg1, imm);
