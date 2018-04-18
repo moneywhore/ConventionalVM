@@ -21,5 +21,6 @@ void dgb();
 void loada(int reg1, int imm);
 void loadb(int reg1, int imm);
 void interrupt(int imm);
+void pushl(int imm);
 
 #endif

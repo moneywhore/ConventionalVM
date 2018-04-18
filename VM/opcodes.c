@@ -134,3 +134,9 @@ void interrupt(int imm) {
 	handleInterrupt(imm);
 	return;
 }
+void pushl(int imm) {
+	printf("pushl %d\n", imm);
+	sp--;
+	memory[sp] = imm;
+	return;
+}

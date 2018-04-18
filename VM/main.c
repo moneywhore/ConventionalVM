@@ -51,10 +51,10 @@ void showRegs()
 	{
 		printf("MON:%08X\n", regs[i]);
 	}
-	printf("MON:\nstack: ");
+	printf("\nMON:stack: ");
 	for (x = 1; x<10; x++)
 	{
-		printf("MON:%04X ", memory[sb - x]);
+		printf("%04X ", memory[sb - x]);
 	}
 	printf("\n");
 }
@@ -125,6 +125,9 @@ void eval(Node *returnStack)
 		break;
 	case 19:
 		interrupt(imm);
+		break;
+	case 20:
+		pushl(imm);
 		break;
 	}
 }

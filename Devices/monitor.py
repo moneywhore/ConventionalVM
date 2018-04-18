@@ -11,6 +11,6 @@ row = 100
 for line in iter(p.stdout.readline, ""):
     if line.startswith("MON:"):
         w.create_text(512,row, fill="#fff", text=line[4:])
-        row += 10
+        row +=30
 w.pack()
 master.mainloop()
