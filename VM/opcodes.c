@@ -152,3 +152,13 @@ void stackDec(int imm) {
 	printf("%d\n", sp);
 	return;
 }
+void readCurr(int reg1) {
+	printf("rcur r%d\n", reg1);
+	regs[reg1] = memory[sp];
+	return;
+}
+void writeCurr(int reg1) {
+	printf("wcur r%d\n", reg1);
+	memory[sp] = regs[reg1];
+	return;
+}
