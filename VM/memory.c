@@ -24,7 +24,6 @@ unsigned int memory[20000000];
 int sp = 20000000;
 int sb = 20000000;
 
-
 char *load_file(char *filename) {
 	FILE *codeF;
 	char *buff = malloc(sizeof(char) * 2048);

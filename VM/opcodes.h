@@ -22,5 +22,7 @@ void loada(int reg1, int imm);
 void loadb(int reg1, int imm);
 void interrupt(int imm);
 void pushl(int imm);
+void stackInc(int imm);
+void stackDec(int imm);
 
 #endif

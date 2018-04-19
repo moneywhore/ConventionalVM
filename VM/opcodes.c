@@ -35,7 +35,7 @@ void push(int reg1) {
 
 void pop(int reg1) {
 	printf("pop r%d\n", reg1);
-	if (sp + 1 > 8192) {
+	if (sp + 1 > 20000000) {
 		printf("Nothing to pop, continuing\n");
 		return;
 	}
@@ -137,6 +137,18 @@ void interrupt(int imm) {
 void pushl(int imm) {
 	printf("pushl %d\n", imm);
 	sp--;
-	memory[sp] = imm;
+	memory[sp] = (imm & 0x0000FFFF);
+	return;
+}
+void stackInc(int imm) {
+	printf("sinc %d\n", imm);
+	sp -= imm;
+	printf("%d\n", sp);
+	return;
+}
+void stackDec(int imm) {
+	printf("sdec %d\n", imm);
+	sp += imm;
+	printf("%d\n", sp);
 	return;
 }

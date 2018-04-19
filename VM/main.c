@@ -129,6 +129,12 @@ void eval(Node *returnStack)
 	case 20:
 		pushl(imm);
 		break;
+	case 21:
+		stackInc(imm);
+		break;
+	case 22:
+		stackDec(imm);
+		break;
 	}
 }
 
