@@ -9,7 +9,7 @@ push r2
 push r3
 push r4
 sdec 3
-memr r5
+rcur r5
 sinc 2
-memr r6
+rcur r6
 dbg

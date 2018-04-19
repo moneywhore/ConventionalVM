@@ -24,5 +24,7 @@ void interrupt(int imm);
 void pushl(int imm);
 void stackInc(int imm);
 void stackDec(int imm);
+void readCur(int reg1);
+void writeCur(int reg1);
 
 #endif

@@ -135,6 +135,12 @@ void eval(Node *returnStack)
 	case 22:
 		stackDec(imm);
 		break;
+	case 23:
+		readCur(reg1);
+		break;
+	case 24:
+		writeCur(reg1);
+		break;
 	}
 }
 
