@@ -67,14 +67,14 @@ void sub(int reg1, int reg2, int reg3) {
 	regs[reg1] = regs[reg2] - regs[reg3];
 	return;
 }
-void memr(int reg1, int reg2) {
-	printf("memr r%d r%d\n", reg1, reg2);
-	regs[reg1] = memory[regs[reg2]];
+void memr(int reg1) {
+	printf("memr r%d\n", reg1, reg2);
+	regs[reg1] = memory[sp];
 	return;
 }
-void memw(int reg1, int reg2) {
-	printf("memw r%d r%d\n", reg1, reg2);
-	memory[regs[reg2]] = regs[reg1];
+void memw(int reg1) {
+	printf("memw r%d\n", reg1, reg2);
+	memory[sp] = regs[reg1];
 	return;
 }
 void jmp(int imm) {
