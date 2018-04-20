@@ -1,15 +1,17 @@
-loadi r0 %FFCC
-loadi r1 %FFEE
-loadi r2 %FFAA
-loadi r3 %EECC
-loadi r4 %AAAA
-push r0
-push r1
-push r2
-push r3
-push r4
-sdec 3
-rcur r5
-sinc 2
-rcur r6
-dbg
+loadi r0 3
+wcur r0
+sinc 1
+loadi r0 5
+wcur r0
+sinc 1
+loadi r0 1
+wcur r0
+sinc 1
+loadi r0 0
+wcur r0
+sinc 1
+loadi r0 6
+wcur r0
+sdec 1
+loadi r0 4
+wcur r0

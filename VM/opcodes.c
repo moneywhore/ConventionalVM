@@ -35,10 +35,6 @@ void push(int reg1) {
 
 void pop(int reg1) {
 	printf("pop r%d\n", reg1);
-	if (sp + 1 > 20000000) {
-		printf("Nothing to pop, continuing\n");
-		return;
-	}
 	regs[reg1] = memory[sp];
 	memory[sp] = 0;
 	sp++;
