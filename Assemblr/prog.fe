@@ -1,18 +1,9 @@
-3
-3
-#nop;nop;nop;nop
-=jimbo
 7
-12
-+
-:jimbo
 @yards_to_feet
-5
-3
-+
-#dbg
+#nop;nop
 !!
 :yards_to_feet
 3
 *
+#pop r0
 ;

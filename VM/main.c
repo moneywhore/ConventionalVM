@@ -32,14 +32,16 @@ void decode(int instr)
 }
 
 
-void callInstr(int address, Node *returnStack) {
-	returnStack = addNode(returnStack, pc + 1);
+Node *callInstr(int address, Node *returnStack) {
+	returnStack = addNode(returnStack, pc);
 	pc = address;
+	return returnStack;
 }
 
-void retInstr(Node *returnStack) {
+Node *retInstr(Node *returnStack) {
 	pc = returnStack->returnAddress;
 	returnStack = removeNode(returnStack);
+	return returnStack;
 }
 
 void showRegs()
@@ -59,7 +61,7 @@ void showRegs()
 	printf("\n");
 }
 
-void eval(Node *returnStack)
+Node *eval(Node *returnStack)
 {
 	int upperHalf = 0;
 	int lowerHalf = 0;
@@ -106,10 +108,10 @@ void eval(Node *returnStack)
 		mul(reg1, reg2, reg3);
 		break;
 	case 13:
-		call(reg1, returnStack);
+		returnStack = call(reg1, returnStack);
 		break;
 	case 14:
-		ret(returnStack);
+		returnStack = ret(returnStack);
 		break;
 	case 15:
 		div(reg1, reg2, reg3);
@@ -142,6 +144,8 @@ void eval(Node *returnStack)
 		writeCur(reg1);
 		break;
 	}
+	printf("Return stack address %x\n",returnStack);
+	return returnStack;
 }
 
 void run(Node *returnStack)
@@ -150,7 +154,7 @@ void run(Node *returnStack)
 	{
 		int instr = fetch();
 		decode(instr);
-		eval(returnStack);
+		returnStack = eval(returnStack);
 	}
 }
 

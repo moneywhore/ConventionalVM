@@ -87,19 +87,19 @@ void mul(int reg1, int reg2, int reg3) {
 	regs[reg1] = regs[reg2] * regs[reg3];
 	return;
 }
-void call(int reg1, Node *returnStack) {
+Node *call(int reg1, Node *returnStack) {
 	printf("call r%d\n", reg1);
-	callInstr(regs[reg1], returnStack);
-	return;
+	returnStack = callInstr(regs[reg1], returnStack);
+	return returnStack;
 }
-void ret(Node *returnStack) {
+Node *ret(Node *returnStack) {
 	printf("ret\n");
 	if (returnStack->returnAddress == NULL) {
 		printf("You have no one to return to :(\n");
 		return;
 	}
-	retInstr(returnStack);
-	return;
+	returnStack = retInstr(returnStack);
+	return returnStack;
 }
 void div(int reg1, int reg2, int reg3) {
 	printf("div r%d r%d r%d\n", reg1, reg2, reg3);

@@ -2,9 +2,8 @@
 #define MAIN_H_
 #define NUM_REGS 16
 signed int regs[NUM_REGS];
-void callInstr(int address, Node *returnStack);
-void retInstr(Node *returnStack);
-Node *returnStack;
+Node *callInstr(int address, Node *returnStack);
+Node *retInstr(Node *returnStack);
 int pc;
 int running;
 
