@@ -1,6 +1,9 @@
+import com.sun.scenario.effect.LinearConvolveCoreEffect
 import java.io.File
 
-enum class OpCodes(val number:Int){
+var labels = HashMap<String,Int>()
+
+enum class Opcodes(val number:Int){
     HALT(0),
     LOADI(1),
     ADD(2),
@@ -25,37 +28,39 @@ enum class OpCodes(val number:Int){
     SINC(21),
     SDEC(22),
     RCUR(23),
-    WCUR(24)
+    WCUR(24),
+    CALLI(25)
 }
 
 fun convertToBaseOpCode(command:String):Int{
     return when(command){
-        "HALT" -> OpCodes.HALT.number
-        "LOADI"-> OpCodes.LOADI.number
-        "ADD" -> OpCodes.ADD.number
-        "PUSH" -> OpCodes.PUSH.number
-        "POP" -> OpCodes.POP.number
-        "CMP" -> OpCodes.CMP.number
-        "JMPEQ" -> OpCodes.JMPEQ.number
-        "SUB" -> OpCodes.SUB.number
-        "MEMW" -> OpCodes.MEMW.number
-        "MEMR" -> OpCodes.MEMR.number
-        "JMP" -> OpCodes.JMP.number
-        "NOP" -> OpCodes.NOP.number
-        "MUL" -> OpCodes.MUL.number
-        "CALL" -> OpCodes.CALL.number
-        "RET" -> OpCodes.RET.number
-        "DIV" -> OpCodes.DIV.number
-        "DBG" -> OpCodes.DBG.number
-        "LOADA" -> OpCodes.LOADA.number
-        "LOADB" -> OpCodes.LOADB.number
-        "INT" -> OpCodes.INT.number
-        "PUSHL" -> OpCodes.PUSHL.number
-        "SINC" -> OpCodes.SINC.number
-        "SDEC" -> OpCodes.SDEC.number
-        "RCUR" -> OpCodes.RCUR.number
-        "WCUR" -> OpCodes.WCUR.number
-        else -> OpCodes.HALT.number
+        "HALT" -> Opcodes.HALT.number
+        "LOADI"-> Opcodes.LOADI.number
+        "ADD" -> Opcodes.ADD.number
+        "PUSH" -> Opcodes.PUSH.number
+        "POP" -> Opcodes.POP.number
+        "CMP" -> Opcodes.CMP.number
+        "JMPEQ" -> Opcodes.JMPEQ.number
+        "SUB" -> Opcodes.SUB.number
+        "MEMW" -> Opcodes.MEMW.number
+        "MEMR" -> Opcodes.MEMR.number
+        "JMP" -> Opcodes.JMP.number
+        "NOP" -> Opcodes.NOP.number
+        "MUL" -> Opcodes.MUL.number
+        "CALL" -> Opcodes.CALL.number
+        "RET" -> Opcodes.RET.number
+        "DIV" -> Opcodes.DIV.number
+        "DBG" -> Opcodes.DBG.number
+        "LOADA" -> Opcodes.LOADA.number
+        "LOADB" -> Opcodes.LOADB.number
+        "INT" -> Opcodes.INT.number
+        "PUSHL" -> Opcodes.PUSHL.number
+        "SINC" -> Opcodes.SINC.number
+        "SDEC" -> Opcodes.SDEC.number
+        "RCUR" -> Opcodes.RCUR.number
+        "WCUR" -> Opcodes.WCUR.number
+        "CALLI" -> Opcodes.CALLI.number
+        else -> Opcodes.HALT.number
     }
 }
 
@@ -80,8 +85,7 @@ fun mathOpCode(args:List<String>):String {
     return  register1 + register2 + register3 + padStrings(2)
 }
 
-
-fun loadi(args:List<String>):String {
+fun justImm(args:List<String>):String{
     val register = args[1].replace("R","")
     var imm = args[2]
     if (args[2].startsWith("%")) {
@@ -89,7 +93,12 @@ fun loadi(args:List<String>):String {
         return "01" + register + padStrings(4 - imm.length) + imm
     }
     val hexValue = Integer.toHexString(imm.toInt())
-    return "01" + register + padStrings(4 - hexValue.length) + hexValue
+    return register + padStrings(4 - hexValue.length) + hexValue
+}
+
+fun loadi(args:List<String>):String {
+
+    return "01" + justImm(args)
 }
 
 fun loada(args: List<String>):String {
@@ -206,33 +215,39 @@ fun nop():String{
 fun int(args:List<String>):String{
     return "13" + jmpStuff(args)
 }
+
+fun calli(args:List<String>):String{
+    return "19" + justImm(args)
+}
+
 fun addMore(opcode:Int, args:List<String>):String{
     return when(opcode){
-        OpCodes.HALT.number -> padStrings(7)
-        OpCodes.LOADI.number -> loadi(args)
-        OpCodes.ADD.number -> add(args)
-        OpCodes.PUSH.number -> push(args)
-        OpCodes.POP.number -> pop(args)
-        OpCodes.CMP.number -> cmp(args)
-        OpCodes.JMPEQ.number -> jmpeq(args)
-        OpCodes.SUB.number -> sub(args)
-        OpCodes.MEMR.number -> memr(args)
-        OpCodes.MEMW.number -> memw(args)
-        OpCodes.JMP.number -> jmp(args)
-        OpCodes.NOP.number -> nop()
-        OpCodes.MUL.number -> mul(args)
-        OpCodes.CALL.number -> call(args)
-        OpCodes.RET.number -> ret()
-        OpCodes.DIV.number -> div(args)
-        OpCodes.DBG.number -> dbg()
-        OpCodes.LOADA.number -> loada(args)
-        OpCodes.LOADB.number -> loadb(args)
-        OpCodes.INT.number -> int(args)
-        OpCodes.PUSHL.number -> pushl(args)
-        OpCodes.SINC.number -> stackInc(args)
-        OpCodes.SDEC.number -> stackDec(args)
-        OpCodes.RCUR.number -> rcur(args)
-        OpCodes.WCUR.number -> wcur(args)
+        Opcodes.HALT.number -> padStrings(7)
+        Opcodes.LOADI.number -> loadi(args)
+        Opcodes.ADD.number -> add(args)
+        Opcodes.PUSH.number -> push(args)
+        Opcodes.POP.number -> pop(args)
+        Opcodes.CMP.number -> cmp(args)
+        Opcodes.JMPEQ.number -> jmpeq(args)
+        Opcodes.SUB.number -> sub(args)
+        Opcodes.MEMR.number -> memr(args)
+        Opcodes.MEMW.number -> memw(args)
+        Opcodes.JMP.number -> jmp(args)
+        Opcodes.NOP.number -> nop()
+        Opcodes.MUL.number -> mul(args)
+        Opcodes.CALL.number -> call(args)
+        Opcodes.RET.number -> ret()
+        Opcodes.DIV.number -> div(args)
+        Opcodes.DBG.number -> dbg()
+        Opcodes.LOADA.number -> loada(args)
+        Opcodes.LOADB.number -> loadb(args)
+        Opcodes.INT.number -> int(args)
+        Opcodes.PUSHL.number -> pushl(args)
+        Opcodes.SINC.number -> stackInc(args)
+        Opcodes.SDEC.number -> stackDec(args)
+        Opcodes.RCUR.number -> rcur(args)
+        Opcodes.WCUR.number -> wcur(args)
+        Opcodes.CALLI.number -> calli(args)
         else -> "0000000000"
     }
 }
@@ -250,6 +265,61 @@ fun assemble(asm:List<String>):String{
     return outputString
 }
 
+fun removeComments(asm:List<String>):List<String>{
+    var returnAsm = mutableListOf<String>()
+    for(line in asm){
+        var hasComment = line.indexOf(";")
+        if(hasComment >= 0) {
+            val newLine = line.removeRange(line.indexOf(";"), line.length)
+            if(newLine!= ""){
+                returnAsm.add(newLine)
+            }
+        }else{
+            returnAsm.add(line)
+        }
+
+    }
+    return returnAsm
+}
+
+fun calculateLabelAddress(code:List<String>):List<String>{
+    var lineCounter = -1
+    var labelLessCode = mutableListOf<String>()
+    val regex = Regex("[ :,]")
+    for(line in code){
+        lineCounter++
+        if(line.toLowerCase().startsWith("label")){
+            val labelName = line.toLowerCase().split(regex)
+            labels.put(labelName[1],lineCounter)
+            val lineNew = "nop"
+            labelLessCode.add(lineNew)
+        }else{
+            labelLessCode.add(line)
+        }
+    }
+    return labelLessCode
+}
+
+fun updateWithProperLocation(code:List<String>):List<String>{
+    var finalVersion = mutableListOf<String>()
+    val regex = Regex("[ :,]")
+    for(line in code){
+        var newLine = ""
+        for(key in labels.keys){
+            val lineData = line.toLowerCase().split(regex)
+            for(parts in lineData){
+                if(parts == key){
+                    newLine += labels[key].toString()
+                }else{
+                    newLine += parts + " "
+                }
+            }
+        }
+        finalVersion.add(newLine)
+    }
+    return finalVersion
+}
+
 fun main(arg:Array<String>){
     var filename= "code.asm"
     if(arg.size > 1){
@@ -258,7 +328,14 @@ fun main(arg:Array<String>){
     print(filename)
     val codeFile = File(filename)
     val code = codeFile.readLines()
-    val output = assemble(code)
+
+    val withoutComments = removeComments(code)
+    val labellessCode = calculateLabelAddress(withoutComments)
+    labellessCode.forEach({ println(it)})
+    val finalCode = updateWithProperLocation(labellessCode)
+    println("\n\n")
+    finalCode.forEach({ println(it)})
+    val output = assemble(finalCode)
     val outputText = File("code.txt")
     outputText.writeText(output)
 }
