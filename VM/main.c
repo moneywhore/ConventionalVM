@@ -106,10 +106,10 @@ void eval(Node *returnStack)
 		mul(reg1, reg2, reg3);
 		break;
 	case 13:
-		call(reg1);
+		call(reg1, returnStack);
 		break;
 	case 14:
-		ret();
+		ret(returnStack);
 		break;
 	case 15:
 		div(reg1, reg2, reg3);

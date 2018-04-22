@@ -87,14 +87,14 @@ void mul(int reg1, int reg2, int reg3) {
 	regs[reg1] = regs[reg2] * regs[reg3];
 	return;
 }
-void call(int reg1) {
+void call(int reg1, Node *returnStack) {
 	printf("call r%d\n", reg1);
 	callInstr(regs[reg1], returnStack);
 	return;
 }
-void ret() {
+void ret(Node *returnStack) {
 	printf("ret\n");
-	if (returnStack->Previous == NULL) {
+	if (returnStack->returnAddress == NULL) {
 		printf("You have no one to return to :(\n");
 		return;
 	}
