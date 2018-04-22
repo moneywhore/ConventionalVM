@@ -13,8 +13,11 @@ operators = {"+" : "pop r0\npop r1\nadd r2 r0 r1\npush r2",
 def whatIsIt(line):
     if line.startswith(":"):
         return "LABEL " + line[1:]
+
+    elif line.startswith("<"):
+        return "INCLUDE " + (line[1:])[:-1]
     
-    if line.startswith(";"):
+    elif line.startswith(";"):
         return "ret"
     
     elif line.startswith("@"):
@@ -35,6 +38,24 @@ def whatIsIt(line):
     else:
         return "pushl " + line
 
+def precompile_pass(lines):
+    added_code = []
+    for i in lines:
+        if "INCLUDE" in i:
+            added_code += include_file(i.split()[1])
+        else:
+            added_code.append(i)
+    return added_code
+
+def include_file(name):
+    additional_code = []
+    with open(name) as f:
+        contents = f.readlines()
+    for i in contents:
+        i = i.strip()
+        additional_code.extend(whatIsIt(i).split("\n"))
+    return additional_code
+
 def variable_pass(lines):
     new_lines = []
     line_counter = 0
@@ -53,11 +74,17 @@ def variable_pass(lines):
         
         line_counter += 1
     return new_lines
-line_counter = 0
+
+one_line_parsed = []
 for i in contents:
     i = i.strip()
+    one_line_parsed.extend(i.split(","))
+for i in one_line_parsed:
+    i = i.strip()
     code.extend(whatIsIt(i).split("\n"))
-    line_counter += 1
+code = precompile_pass(code)
+
+print code
 
 print "\n".join(variable_pass(variable_pass(code)))
 

@@ -1,9 +1,10 @@
+7,3,+
+10
+=bob
+12
 7
-@yards_to_feet
-#nop;nop
++
+:bob
+5,6,-
+#pop r0;dbg
 !!
-:yards_to_feet
-3
-*
-#pop r0
-;
