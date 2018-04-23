@@ -1,10 +1,4 @@
-7,3,+
-10
-=bob
-12
-7
-+
-:bob
-5,6,-
-#pop r0;dbg
-!!
+getStr
+printStr mem 6
+#dbg
+end

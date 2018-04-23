@@ -1,26 +1,19 @@
-pushl 7
-pushl 3
-pop r0
-pop r1
-add r2 r0 r1
-push r2
-pushl 10
-pop r0
-pop r1
+int 1
+push r0
+loadi r1 13
 cmp r0 r1
+jmpeq 6
+jmp 0
+loadi r2 0
+loadi r1 6
+sdec 6
+rcur r0
+sinc 1
+int 0
+loadi r3 1
+sub r1 r1 r3
+cmp r1 r2
 jmpeq 17
-pushl 12
-pushl 7
-pop r0
-pop r1
-add r2 r0 r1
-push r2
-pushl 5
-pushl 6
-pop r0
-pop r1
-sub r2 r0 r1
-push r2
-pop r0
+jmp 9
 dbg
 halt

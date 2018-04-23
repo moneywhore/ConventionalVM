@@ -1,10 +1,12 @@
 import os
+import random
 
 with open("prog.fe") as f:
     contents = f.readlines()
 
 code = []
 label_dict = {}
+var_dict = {}
 operators = {"+" : "pop r0\npop r1\nadd r2 r0 r1\npush r2",
              "-" : "pop r0\npop r1\nsub r2 r0 r1\npush r2",
              "*" : "pop r0\npop r1\nmul r2 r0 r1\npush r2",
@@ -14,6 +16,22 @@ def whatIsIt(line):
     if line.startswith(":"):
         return "LABEL " + line[1:]
 
+    if line.split()[0] == "printStr":
+        rand_name = random.randint(0,1000000000000)
+        rand_name_after = random.randint(0,1000000000000)
+        if line.split()[1] == "mem":
+            return "loadi r2 0\nloadi r1 " +  line.split()[2] + "\nsdec " + line.split()[2] + "\n" + "LABEL " + str(rand_name) + "\nrcur r0\n" + "sinc 1\nint 0\nloadi r3 1\nsub r1 r1 r3\ncmp r1 r2\njmpeq " + str(rand_name_after) + "\n" + "jmp " + str(rand_name) + "\n" + "LABEL " + str(rand_name_after)
+        string_prt = ""
+        line = line.split('"')
+        for i in line[1]:
+            string_prt += "loadi r0 " + str(ord(i)) + "\nint 0\n"
+        return string_prt
+
+    if line.split()[0] == "getStr":
+        rand_name = random.randint(0,1000000000000)
+        rand_name_start = random.randint(0,1000000000000)
+        return "LABEL " + str(rand_name_start) + "\n" + "int 1\npush r0\nloadi r1 13\ncmp r0 r1\njmpeq " + str(rand_name) + "\njmp " + str(rand_name_start) + "\n" + "LABEL " + str(rand_name)
+    
     elif line.startswith("<"):
         return "INCLUDE " + (line[1:])[:-1]
     
@@ -33,7 +51,7 @@ def whatIsIt(line):
         line = line[1:].strip()
         line = line.replace(";", "\n")
         return line
-    elif line == "!!":
+    elif line == "end":
         return "halt"
     else:
         return "pushl " + line
@@ -74,6 +92,7 @@ def variable_pass(lines):
         
         line_counter += 1
     return new_lines
+        
 
 one_line_parsed = []
 for i in contents:
@@ -82,6 +101,7 @@ for i in contents:
 for i in one_line_parsed:
     i = i.strip()
     code.extend(whatIsIt(i).split("\n"))
+
 code = precompile_pass(code)
 
 print code

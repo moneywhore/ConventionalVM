@@ -1,6 +1,7 @@
 #define NUM_REGS 16
 #define byte char
 #include "memory.h"
+#include "interrupt.h"
 #include <stdio.h>
 #include "main.h"
 
@@ -95,7 +96,7 @@ Node *call(int reg1, Node *returnStack) {
 Node *ret(Node *returnStack) {
 	printf("ret\n");
 	if (returnStack->returnAddress == NULL) {
-		printf("You have no one to return to :(\n");
+		printf("You have no one to return to ;(\n");
 		return;
 	}
 	returnStack = retInstr(returnStack);
@@ -107,7 +108,7 @@ void div(int reg1, int reg2, int reg3) {
 	return;
 }
 void dbg() {
-	printf("MON:DBG:\n");
+	printf("MONN:DBG:\n");
 	showRegs();
 	return;
 }
