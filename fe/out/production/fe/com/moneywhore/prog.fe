@@ -1,4 +1,4 @@
 getStr
-printStr mem 7
+printStr mem
 #dbg
 end

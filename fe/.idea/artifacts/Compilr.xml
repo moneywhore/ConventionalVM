@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Compilr">
+    <output-path>$PROJECT_DIR$/../ConventionalVM/Assemblr</output-path>
+    <root id="archive" name="Compilr.jar">
+      <element id="module-output" name="fe" />
+    </root>
+  </artifact>
+</component>

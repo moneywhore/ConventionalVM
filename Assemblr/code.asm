@@ -1,19 +1,28 @@
+pushl 0
+nop
 int 1
 push r0
 loadi r1 13
 cmp r0 r1
-jmpeq 6
-jmp 0
-loadi r2 0
-loadi r1 6
-sdec 6
+jmpeq 10
+jmp 2
+pushl 0
+nop
+loadi r1 0
+nop
+sdec 1
 rcur r0
+cmp r0 r1
+jmpeq 18
+jmp 12
+nop
+nop
 sinc 1
+rcur r0
+cmp r0 r1
+jmpeq 26
 int 0
-loadi r3 1
-sub r1 r1 r3
-cmp r1 r2
-jmpeq 17
-jmp 9
+jmp 19
+nop
 dbg
 halt
