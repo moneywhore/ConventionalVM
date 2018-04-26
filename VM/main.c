@@ -143,6 +143,8 @@ Node *eval(Node *returnStack)
 	case 24:
 		writeCur(reg1);
 		break;
+	case 25:
+		returnStack = calli(imm,returnStack);
 	}
 	printf("Return stack address %x\n",returnStack);
 	return returnStack;
