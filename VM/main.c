@@ -9,6 +9,7 @@ signed int regs[NUM_REGS];
 int githubfuckingload;
 int pc = 0;
 int running = 1;
+int instructionsInClock =  -1;
 
 int instrNum = 0;
 int reg1 = 0;
@@ -16,6 +17,10 @@ int reg2 = 0;
 int reg3 = 0;
 int imm = 0;
 int cf = 0;
+
+void setInstructionsInClock(int value){
+	instructionsInClock = value;
+}
 
 int fetch()
 {
@@ -33,8 +38,10 @@ void decode(int instr)
 
 
 Node *callInstr(int address, Node *returnStack) {
+	printf("PC: %d\n",pc);
 	returnStack = addNode(returnStack, pc);
 	pc = address;
+	printf("PC: %d\n",pc);
 	return returnStack;
 }
 
@@ -143,8 +150,13 @@ Node *eval(Node *returnStack)
 	case 24:
 		writeCur(reg1);
 		break;
+	case 25:
+		returnStack = calli(imm,returnStack);
+		break;
+	case 26:
+		iret();
+		break;
 	}
-	printf("Return stack address %x\n",returnStack);
 	return returnStack;
 }
 
@@ -152,9 +164,19 @@ void run(Node *returnStack)
 {
 	while (running)
 	{
-		int instr = fetch();
-		decode(instr);
-		returnStack = eval(returnStack);
+		//Check if the time left in the clock is greater than 0. If its less than 0. Ignore it as well. 
+		//tl;dr if its equal to zero interrupt the cpu to let it know to change which task to run
+		printf("clocks left till int: %d\n",instructionsInClock);
+		if(instructionsInClock > 0 || instructionsInClock < 0){
+			int instr = fetch();
+			decode(instr);
+			returnStack = eval(returnStack);
+		}else{
+			//Trigger Programming control clock. Refer to commit that this was added in for more information on that.
+			interrupt(17);
+		}
+		instructionsInClock--;
+		
 	}
 }
 
@@ -166,7 +188,9 @@ int main(int argc, char * argv[])
 	}
 	Node *n = malloc(sizeof(Node));
 	n->Previous=NULL;
-	n->returnAddress=NULL;
+	n->returnAddress= (int)NULL;
+
+	interuptINIT();
 
 	load_mem(argv[1]);
 	run(n);
