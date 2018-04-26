@@ -15,6 +15,7 @@ void jmp(int imm);
 void nop();
 void mul(int reg1, int reg2, int reg3);
 Node *call(int reg1, Node* returnStack);
+Node *calli(int imm, Node *returnStack);
 Node *ret(Node* returnStack);
 void div(int reg1, int reg2, int reg3);
 void dgb();
