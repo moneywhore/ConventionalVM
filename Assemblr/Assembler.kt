@@ -2,6 +2,8 @@ import com.sun.scenario.effect.LinearConvolveCoreEffect
 import java.io.File
 
 var labels = HashMap<String,Int>()
+var calcOrigin:Int = 0
+
 
 enum class Opcodes(val number:Int){
     HALT(0),
@@ -29,7 +31,8 @@ enum class Opcodes(val number:Int){
     SDEC(22),
     RCUR(23),
     WCUR(24),
-    CALLI(25)
+    CALLI(25),
+    ORIGIN(26)
 }
 
 fun convertToBaseOpCode(command:String):Int{
@@ -60,6 +63,7 @@ fun convertToBaseOpCode(command:String):Int{
         "RCUR" -> Opcodes.RCUR.number
         "WCUR" -> Opcodes.WCUR.number
         "CALLI" -> Opcodes.CALLI.number
+        "ORG" -> Opcodes.ORIGIN.number
         else -> Opcodes.HALT.number
     }
 }
@@ -188,7 +192,7 @@ fun jmpStuff(args:List<String>):String{
         address = address.replace("%", "")
         return "00" + padStrings(3 - address.length) + address
     }
-    address = Integer.toHexString(address.toInt())
+    address = Integer.toHexString(address.toInt() + calcOrigin)
     return "00"+padStrings(3-address.length) + address
 }
 
@@ -220,6 +224,11 @@ fun calli(args:List<String>):String{
     return "19" + justImm(args)
 }
 
+fun offset(args:List<String>):String{
+    calcOrigin = args[0].toInt()
+    return nop()
+}
+
 fun addMore(opcode:Int, args:List<String>):String{
     return when(opcode){
         Opcodes.HALT.number -> padStrings(7)
@@ -248,6 +257,7 @@ fun addMore(opcode:Int, args:List<String>):String{
         Opcodes.RCUR.number -> rcur(args)
         Opcodes.WCUR.number -> wcur(args)
         Opcodes.CALLI.number -> calli(args)
+        Opcodes.ORIGIN.number -> offset(args)
         else -> "0000000000"
     }
 }
