@@ -93,6 +93,13 @@ Node *call(int reg1, Node *returnStack) {
 	returnStack = callInstr(regs[reg1], returnStack);
 	return returnStack;
 }
+
+Node *calli(int imm, Node *returnStack){
+	printf("calli imm: %d\n",imm);
+	returnStack = callInstr(imm,returnStack);
+	return returnStack;
+}
+
 Node *ret(Node *returnStack) {
 	printf("ret\n");
 	if (returnStack->returnAddress == NULL) {
@@ -159,3 +166,4 @@ void writeCur(int reg1) {
 	memory[sp] = regs[reg1];
 	return;
 }
+
