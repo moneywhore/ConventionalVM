@@ -2,7 +2,7 @@ package com.moneywhore
 // This file can also be known as the second pass. It converts labels, calls, etc into usable addresses for the VM
 
 // Label dictionary, contains the addresses of the labels
-class Variable constructor(var labelDict:HashMap<String,String> = hashMapOf<String, String>()){
+class Variable constructor(var labelDict:HashMap<String,String> = hashMapOf<String, String>(), var varDict:HashMap<String,Int> = hashMapOf<String, Int>(), var offset:Int = 0){
 
     // Creates a definition for a label
     fun handleLabel(line: String, lineNumber: Int): String {

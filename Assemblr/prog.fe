@@ -1,4 +1,15 @@
-getStr
-printStr mem 7
+:other_meme
+7
+#push r6
+/
+#pop r5
+printStr "lol hey look at me im a string"
+;
+:main
+3
+7
+*
+#pop r6
+@other_meme
 #dbg
-end
+;

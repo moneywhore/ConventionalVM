@@ -2,6 +2,7 @@ package com.moneywhore
 // Imports
 import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 // Store the code into an array of lines
 var code = ArrayList<String>()
@@ -33,11 +34,7 @@ fun simpleCommands(line:String):String {
 
 // Simple, easy functions
 fun label(line:String):String {
-    return "LABEL " + line
-}
-
-fun include(line:String):String {
-    return "INCLUDE " + line
+    return "LABEL " + line + "\n"
 }
 
 fun call(label:String):String {
@@ -56,7 +53,7 @@ fun end():String {
     return "halt"
 }
 fun defaultHandle(line:String):String {
-    return "pushl" + line
+    return "pushl " + line
 }
 
 // More complex functions
@@ -90,7 +87,7 @@ fun printStr(line:String):String {
     }
 
     else {
-        line.split(" ")[1].forEach { letter -> finalString = finalString + "loadi r0 " + letter + "\n" + "int 0" + "\n"}
+        line.split('"')[1].forEach { letter -> finalString = finalString + "loadi r0 " + letter.toInt() + "\n" + "int 0" + "\n"}
     }
 
     return finalString
@@ -132,7 +129,10 @@ fun main(arg:Array<String>){
     }
     print(filename)
     val codeFile = File(filename)
-    val preCode = ArrayList<String>(codeFile.readLines())
+    var preCode = ArrayList<String>()
+    preCode.add("@main")
+    preCode.add("end")
+    preCode.addAll(ArrayList<String>(codeFile.readLines()))
     code = interpret(preCode)
     code.removeAll(arrayListOf(""))
     code = labelCalc(code, 1)

@@ -1,7 +1,8 @@
-import com.sun.scenario.effect.LinearConvolveCoreEffect
 import java.io.File
 
 var labels = HashMap<String,Int>()
+var calcOrigin:Int = 0
+
 
 enum class Opcodes(val number:Int){
     HALT(0),
@@ -29,7 +30,9 @@ enum class Opcodes(val number:Int){
     SDEC(22),
     RCUR(23),
     WCUR(24),
-    CALLI(25)
+    CALLI(25),
+    IRET(26),
+    ORIGIN(300)
 }
 
 fun convertToBaseOpCode(command:String):Int{
@@ -60,6 +63,8 @@ fun convertToBaseOpCode(command:String):Int{
         "RCUR" -> Opcodes.RCUR.number
         "WCUR" -> Opcodes.WCUR.number
         "CALLI" -> Opcodes.CALLI.number
+        "ORG" -> Opcodes.ORIGIN.number
+        "IRET" -> Opcodes.IRET.number
         else -> Opcodes.HALT.number
     }
 }
@@ -188,7 +193,7 @@ fun jmpStuff(args:List<String>):String{
         address = address.replace("%", "")
         return "00" + padStrings(3 - address.length) + address
     }
-    address = Integer.toHexString(address.toInt())
+    address = Integer.toHexString(address.toInt() + calcOrigin)
     return "00"+padStrings(3-address.length) + address
 }
 
@@ -198,6 +203,10 @@ fun call(args: List<String>):String {
 
 fun ret():String {
     return "0E" + padStrings(5)
+}
+
+fun iret():String{
+    return "1A" + padStrings(5)
 }
 
 fun jmpeq(args:List<String>):String{
@@ -217,7 +226,12 @@ fun int(args:List<String>):String{
 }
 
 fun calli(args:List<String>):String{
-    return "19" + justImm(args)
+    return "19" + jmpStuff(args)
+}
+
+fun offset(args:List<String>):String{
+    calcOrigin = args[0].toInt()
+    return nop()
 }
 
 fun addMore(opcode:Int, args:List<String>):String{
@@ -248,6 +262,8 @@ fun addMore(opcode:Int, args:List<String>):String{
         Opcodes.RCUR.number -> rcur(args)
         Opcodes.WCUR.number -> wcur(args)
         Opcodes.CALLI.number -> calli(args)
+        Opcodes.ORIGIN.number -> offset(args)
+        Opcodes.IRET.number -> iret()
         else -> "0000000000"
     }
 }
@@ -266,9 +282,9 @@ fun assemble(asm:List<String>):String{
 }
 
 fun removeComments(asm:List<String>):List<String>{
-    var returnAsm = mutableListOf<String>()
+    val returnAsm = mutableListOf<String>()
     for(line in asm){
-        var hasComment = line.indexOf(";")
+        val hasComment = line.indexOf(";")
         if(hasComment >= 0) {
             val newLine = line.removeRange(line.indexOf(";"), line.length)
             if(newLine!= ""){
@@ -282,14 +298,13 @@ fun removeComments(asm:List<String>):List<String>{
     return returnAsm
 }
 
-fun calculateLabelAddress(code:List<String>):List<String>{
-    var lineCounter = -1
-    var labelLessCode = mutableListOf<String>()
+fun calculateLabelAddress(code:List<String>):List<String>{ var lineCounter = -1
+    val labelLessCode = mutableListOf<String>()
     val regex = Regex("[ :,]")
     for(line in code){
         lineCounter++
         if(line.toLowerCase().startsWith("label")){
-            val labelName = line.toLowerCase().split(regex)
+            val labelName = line.split(regex)
             labels.put(labelName[1],lineCounter)
             val lineNew = "nop"
             labelLessCode.add(lineNew)
@@ -300,24 +315,37 @@ fun calculateLabelAddress(code:List<String>):List<String>{
     return labelLessCode
 }
 
+fun String.isLabel():Boolean{
+    for(key in labels.keys){
+        if(this == key){
+            return true
+        }
+    }
+    return false
+}
+
 fun updateWithProperLocation(code:List<String>):List<String>{
-    var finalVersion = mutableListOf<String>()
+    val finalVersion  = mutableListOf<String>()
     val regex = Regex("[ :,]")
-    for(line in code){
-        var newLine = ""
-        for(key in labels.keys){
-            val lineData = line.toLowerCase().split(regex)
-            for(parts in lineData){
-                if(parts == key){
-                    newLine += labels[key].toString()
-                }else{
-                    newLine += parts + " "
-                }
+    for(line:String in code){
+        val words = line.split(regex)
+        var newline = ""
+        for(word in words){
+            newline += if(word.isLabel()){
+               " " +labels[word].toString()
+            }else{
+               " " + word
             }
         }
-        finalVersion.add(newLine)
+        finalVersion.add(newline)
     }
     return finalVersion
+}
+
+
+
+fun removeLines(code:List<String> ):List<String>{
+    return code.filter { it != ""  && it != " "}.map { it.trim() }
 }
 
 fun main(arg:Array<String>){
@@ -330,10 +358,12 @@ fun main(arg:Array<String>){
     val code = codeFile.readLines()
 
     val withoutComments = removeComments(code)
-    val labellessCode = calculateLabelAddress(withoutComments)
+    val removedLines = removeLines(withoutComments)
+    val labellessCode = calculateLabelAddress(removedLines)
     labellessCode.forEach({ println(it)})
-    val finalCode = updateWithProperLocation(labellessCode)
+    val updatedLocations = updateWithProperLocation(labellessCode)
     println("\n\n")
+    val finalCode = removeLines(updatedLocations)
     finalCode.forEach({ println(it)})
     val output = assemble(finalCode)
     val outputText = File("code.txt")

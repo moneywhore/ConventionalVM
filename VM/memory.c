@@ -14,7 +14,7 @@ Node *removeNode(Node *tail) {
 }
 
 Node *addNode(Node* tail, int address) {
-	Node *n = malloc(sizeof(Node));
+	Node *n = (Node *)malloc(sizeof(Node));
 	n->Previous = tail;
 	n->returnAddress = address;
 	return n;
@@ -26,7 +26,7 @@ int sb = 20000000;
 
 char *load_file(char *filename) {
 	FILE *codeF;
-	char *buff = malloc(sizeof(char) * 2048);
+	char *buff = (char *) malloc(sizeof(char) * 2048);
 
 	codeF = fopen(filename, "r");
 	if (codeF == NULL) {

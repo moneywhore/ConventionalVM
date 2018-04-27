@@ -93,11 +93,24 @@ Node *call(int reg1, Node *returnStack) {
 	returnStack = callInstr(regs[reg1], returnStack);
 	return returnStack;
 }
+
+Node *calli(int imm, Node *returnStack){
+	printf("calli imm: %d\n",imm);
+	returnStack = callInstr(imm,returnStack);
+	return returnStack;
+}
+
+
+void iret(){
+	printf("IRET\n");
+	iretExec();
+}
+
 Node *ret(Node *returnStack) {
 	printf("ret\n");
-	if (returnStack->returnAddress == NULL) {
+	if (returnStack->returnAddress == 0) {
 		printf("You have no one to return to ;(\n");
-		return;
+		return returnStack;
 	}
 	returnStack = retInstr(returnStack);
 	return returnStack;

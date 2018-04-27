@@ -3,10 +3,10 @@ package com.moneywhore
 val varClass = Variable()
 
 fun interpret(lines:ArrayList<String>):ArrayList<String> {
-
+    var newLines = lines
     var interpretedCode = ArrayList<String>()
     var lineCount = 0
-    lines.forEach newLine@{ it ->
+    newLines.forEach newLine@{ it ->
         lineCount += 1
         if (simpleCommands.contains(it.get(0).toString())) {
             interpretedCode.addAll(simpleCommands(it).split("\n"))
@@ -20,6 +20,11 @@ fun interpret(lines:ArrayList<String>):ArrayList<String> {
 
         if (it.split(" ")[0] == "getStr") {
             interpretedCode.addAll(getStr().split("\n"))
+            return@newLine
+        }
+
+        if (it.split(" ")[0].toUpperCase() == "INCLUDE") {
+            interpretedCode.addAll(precompiler(it))
             return@newLine
         }
 
@@ -59,10 +64,8 @@ fun labelCalc(lines:ArrayList<String>, pass:Int):ArrayList<String> {
             }
         }
         else {
-            if (it.split(" ")[0] == "jmp" || it.split(" ")[0] == "jmpeq") {
-                calculatedCode.add(varClass.replaceLabelNames(it))
-                return@labelLine
-            }
+            calculatedCode.add(varClass.replaceLabelNames(it))
+            return@labelLine
         }
 
         calculatedCode.add(it)

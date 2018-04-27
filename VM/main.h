@@ -14,4 +14,6 @@ int reg3;
 int imm;
 int cf;
 
+void setInstructionsInClock();
+
 #endif
